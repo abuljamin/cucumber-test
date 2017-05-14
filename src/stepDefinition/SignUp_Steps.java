@@ -1,34 +1,26 @@
 package stepDefinition;
 
-import java.io.Console;
-import java.util.concurrent.TimeUnit;
-
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import cucumberTest.BrowserFactory;
 import junit.framework.Assert;
+import pages.Home_Page;
 import pages.Register_Page;
 
-public class SignUp_Steps {
-	
-	public static WebDriver driver;
+public class SignUp_Steps extends BrowserFactory{
+
+	//WebDriver driver;
 	public Register_Page rPage;
+	public Home_Page hPage;
 
 	@Given("^I am in Sign Up page$")
 	public void i_am_in_Sign_Up_page() throws Throwable {
-		System.setProperty("webdriver.gecko.driver", "driver/geckodriver.exe");
-		driver = new FirefoxDriver();
-	    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-	    driver.manage().window().maximize();
-	    rPage = new Register_Page(driver);
-	    driver.get("http://www.phptravels.net/register");
+		rPage = new Register_Page(getDriver());
+		hPage = new Home_Page(getDriver());
+	    getDriver().get("http://www.phptravels.net/register");
 	}
 
 	@When("^I input valid \"(.*)\", \"(.*)\", \"(.*)\", \"(.*)\", \"(.*)\", \"(.*)\"$")
@@ -44,10 +36,10 @@ public class SignUp_Steps {
 
 	@Then("^I sign up successfully and system redirect me to Home page with my account")
 	public void i_sign_up_successfully_and_system_redirect_me_to_Home_page_with_my_account() throws Throwable {
-	    String result = driver.findElement(By.xpath("//a[contains(text(), 'firstname')]")).getText();
+	    String result = hPage.getRegisteredName();
 	    Assert.assertEquals("firstname", result);
 	    System.out.println(result);
-	    driver.close();
+	    getDriver().close();
 	}
 	
 }
